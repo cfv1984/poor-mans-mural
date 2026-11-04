@@ -9,6 +9,16 @@ the first being it is relatively close to `react-flow`, with which I have some p
 * `npm run start` to run the development environment, or
 * `npm run develop` to run the built artifact -hereinafter 'production'-
 
+## Usage
+
+Once the project is up, click on the canvas to add a note. Notes can be resized from the bottom right handle.
+Clicking on a note will bring it to the front of the stack, and you can click on note titles and contents to 
+change what they say.
+
+Color selection is random, if you don't like the color you got you can throw the note in the big trash can.
+
+Clicking "Save" will make it such that all your notes are there by the next reload.
+
 ## Design decisions
 
 The entire project revolves around a `World` object which allows panning and inserting things in itself, 

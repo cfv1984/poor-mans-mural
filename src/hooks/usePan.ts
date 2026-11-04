@@ -12,12 +12,15 @@ export function usePan(viewportRef: RefObject<HTMLElement | null>) {
     if (!el) return;
 
     const onWheel = (e: WheelEvent) => {
+      const { target } = e;
+      if (target instanceof HTMLTextAreaElement && target.scrollHeight > target.clientHeight)
+        return;
       e.preventDefault();
       setCam((c) => ({ x: c.x - e.deltaX, y: c.y - e.deltaY }));
     };
 
     const onPointerDown = (e: PointerEvent) => {
-      if (e.target !== el) return; // no panear al agarrar una nota
+      if (e.target !== el) return;
       dragged.current = false;
       el.setPointerCapture(e.pointerId);
 

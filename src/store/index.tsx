@@ -1,4 +1,10 @@
-import { createContext, useReducer, type Dispatch, type PropsWithChildren } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  type Dispatch,
+  type PropsWithChildren,
+} from "react";
 import { type Props as Note } from "../components/Note/types";
 
 enum ActionTypes {
@@ -7,14 +13,16 @@ enum ActionTypes {
   EDIT = "edit",
   MOVE = "move",
   RESIZE = "resize",
+  FRONT = "front",
 }
 
 type ActionPayloads = {
-  [ActionTypes.ADD]: Note;
+  [ActionTypes.ADD]: Omit<Note, "id">;
   [ActionTypes.REMOVE]: string;
   [ActionTypes.EDIT]: Note;
   [ActionTypes.MOVE]: { id: string; pos: [number, number] };
   [ActionTypes.RESIZE]: { id: string; size: [number, number] };
+  [ActionTypes.FRONT]: string;
 };
 
 type RootState = {
@@ -28,10 +36,17 @@ type Action = {
   };
 }[ActionTypes];
 
+function nextZIndex(notes: Note[]) {
+  return Math.max(0, ...notes.map((n) => n.zIndex ?? 0)) + 1;
+}
+
 export default function Reducer(state: RootState, { payload, type }: Action): RootState {
   switch (type) {
     case ActionTypes.ADD:
-      const notes = [...state.notes, payload];
+      const notes = [
+        ...state.notes,
+        { ...payload, zIndex: nextZIndex(state.notes), id: crypto.randomUUID() },
+      ];
       return {
         notes,
       };
@@ -85,11 +100,25 @@ export default function Reducer(state: RootState, { payload, type }: Action): Ro
         }, [] as Note[]),
       };
       break;
+    case "front":
+      const zIndex = nextZIndex(state.notes);
+      return {
+        notes: state.notes.map((n) => (n.id === payload ? { ...n, zIndex } : n)),
+      };
+      break;
   }
   throw new Error("Unknown action");
 }
 
-export const Context = createContext<[RootState, Dispatch<Action>] | null>(null);
+const Context = createContext<[RootState, Dispatch<Action>] | null>(null);
+
+export function useStore() {
+  const ctx = useContext(Context);
+  if (!ctx) {
+    throw new Error("useStore must be used within a StoreProvider");
+  }
+  return ctx;
+}
 
 export function StoreProvider({ children }: PropsWithChildren) {
   const { Provider } = Context;

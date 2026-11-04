@@ -14,4 +14,5 @@ export type Props = {
   position: [number, number];
   dimensions: [number, number];
   color: Color;
+  zIndex?: number;
 };

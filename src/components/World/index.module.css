@@ -1,3 +1,6 @@
+:global(*) {
+  box-sizing: border-box;
+}
 :global(html),
 :global(body) {
   width: 100%;

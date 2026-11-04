@@ -1,7 +1,7 @@
 import { useState, type PointerEvent as ReactPointerEvent } from "react";
 import type { Point } from "./types";
 
-export function useNoteDrag(position: [number, number], onDrop: (pos: [number, number]) => void) {
+export function useNoteDrag(origin: [number, number], onDrop: (value: [number, number]) => void) {
   const [offset, setOffset] = useState<Point>({ x: 0, y: 0 });
 
   const onPointerDown = (e: ReactPointerEvent<HTMLElement>) => {
@@ -23,7 +23,7 @@ export function useNoteDrag(position: [number, number], onDrop: (pos: [number, n
     };
     const onUp = () => {
       stop();
-      if (delta.x || delta.y) onDrop([position[0] + delta.x, position[1] + delta.y]);
+      if (delta.x || delta.y) onDrop([origin[0] + delta.x, origin[1] + delta.y]);
     };
     el.addEventListener("pointermove", onMove);
     el.addEventListener("pointerup", onUp);

@@ -1,0 +1,61 @@
+.note {
+  position: relative;
+  padding: 10px;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.5),
+    0 0 0 4px rgba(0, 0, 0, 0.1);
+}
+.note:after {
+  content: "";
+  position: absolute;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  top: 5px;
+  left: 5px;
+  bottom: 5px;
+  right: 5px;
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.5), transparent);
+  pointer-events: none;
+}
+.noteFields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+}
+.noteField {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  user-select: text;
+  overflow-y: auto;
+}
+.noteField:focus {
+  outline: 1px dashed rgba(0, 0, 0, 0.4);
+}
+.noteField:read-only {
+  outline: none;
+  cursor: default;
+  user-select: none;
+}
+input.noteField {
+  font-weight: bold;
+}
+textarea.noteField {
+  flex: 1;
+  min-height: 0;
+  resize: none;
+  overflow-y: auto;
+}
+.noteHandle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nwse-resize;
+}

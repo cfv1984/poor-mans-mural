@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useReducer,
-  type Dispatch,
-  type PropsWithChildren,
-} from "react";
+import { createContext, useReducer, type Dispatch, type PropsWithChildren } from "react";
 import { type Props as Note } from "../components/Note/types";
 
 enum ActionTypes {
@@ -33,10 +28,7 @@ type Action = {
   };
 }[ActionTypes];
 
-export default function Reducer(
-  state: RootState,
-  { payload, type }: Action,
-): RootState {
+export default function Reducer(state: RootState, { payload, type }: Action): RootState {
   switch (type) {
     case ActionTypes.ADD:
       const notes = [...state.notes, payload];
@@ -56,11 +48,11 @@ export default function Reducer(
     case "remove":
       const copy = [...state.notes];
       const pos = copy.findIndex((n) => n.id === payload);
-      if(pos>=0){
-      copy.splice(pos, 1);
-      return {
-        notes: copy,
-      };
+      if (pos >= 0) {
+        copy.splice(pos, 1);
+        return {
+          notes: copy,
+        };
       }
       break;
     case "move":
@@ -100,7 +92,7 @@ export default function Reducer(
 export const Context = createContext<[RootState, Dispatch<Action>] | null>(null);
 
 export function StoreProvider({ children }: PropsWithChildren) {
-const { Provider } = Context;
+  const { Provider } = Context;
   const [store, dispatch] = useReducer(Reducer, {
     notes: [],
   });

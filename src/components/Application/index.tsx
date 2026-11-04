@@ -4,7 +4,7 @@ import { StoreProvider } from "../../store";
 export default function Application() {
   return (
     <StoreProvider>
-        <World />
+      <World />
     </StoreProvider>
   );
 }

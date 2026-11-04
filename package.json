@@ -2,6 +2,10 @@
   "name": "poor-mans-mural",
   "version": "0.0.1",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "develop": "vite",
@@ -11,10 +15,6 @@
     "format": "oxfmt",
     "tsc": "tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@types/react-dom": "^19.3.0",
     "react": "^19.3.1",

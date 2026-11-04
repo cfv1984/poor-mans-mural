@@ -1,8 +1,9 @@
-:global(html),:global(body){
-    width:100%;
-    min-height:100vh;
-    margin:0;
-    padding:0;
+:global(html),
+:global(body) {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .viewport {
@@ -10,15 +11,15 @@
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: tomato;
+  background-image: radial-gradient(circle, #aaa 1px, transparent 1px);
+  background-size: 25px 25px;
   touch-action: none;
 }
 
 .world {
-    position:absolute;
-    top:0;
-    left:0;
-    width:0;
-    height:0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
 }
-

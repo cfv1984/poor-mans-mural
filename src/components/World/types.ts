@@ -1,1 +1,1 @@
-import { type Props as Note } from "../Note/types";
+import { type Props as Note } from "../Note/types";

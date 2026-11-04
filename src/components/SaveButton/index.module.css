@@ -1,3 +1,17 @@
 .button {
-  font-size: 36pt;
+    all: revert;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 24pt;
+    background: #dadada;
+    border: none;
+    outline: none;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem #dadada;
+    transition: background 1s
+}
+.button:hover{
+  background: lightseagreen
 }

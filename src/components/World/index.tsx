@@ -4,6 +4,7 @@ import Note from "../Note";
 import { world, viewport } from "./index.module.css";
 import { usePan } from "../../hooks/usePan";
 import { useWorldClick } from "../../hooks/useWorldClick";
+import { useMinScreenSize } from "../../hooks/useMinScreenSize";
 import type { Point } from "../../hooks/types";
 import { Colors, type Color } from "../Note/types";
 import SaveButton from "../SaveButton";
@@ -16,6 +17,8 @@ function randomInt(min: number, max: number) {
 const COLORS = Object.values(Colors);
 
 export default function World() {
+  useMinScreenSize();
+
   const viewportRef = useRef<HTMLElement>(null);
   const { cam, dragged } = usePan(viewportRef);
 

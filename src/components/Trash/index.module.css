@@ -1,14 +1,19 @@
 .trash {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 10rem;
-  height: 10rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eee;
-  border: 2px solid #aaa;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 10rem;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: orangered;
+    border-radius: 1rem;
+    transition: background 1s;
+}
+
+.trash:hover {
+  background: coral
 }
 
 .highlighted {

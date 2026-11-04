@@ -1,10 +1,12 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useReducer,
   type Dispatch,
   type PropsWithChildren,
 } from "react";
+import { load } from "../api";
 import { type Props as Note } from "../components/Note/types";
 
 enum ActionTypes {
@@ -14,6 +16,9 @@ enum ActionTypes {
   MOVE = "move",
   RESIZE = "resize",
   FRONT = "front",
+  SHOW_LOADING = "showLoading",
+  HIDE_LOADING = "hideLoading",
+  LOAD = "load",
 }
 
 type ActionPayloads = {
@@ -23,17 +28,20 @@ type ActionPayloads = {
   [ActionTypes.MOVE]: { id: string; pos: [number, number] };
   [ActionTypes.RESIZE]: { id: string; size: [number, number] };
   [ActionTypes.FRONT]: string;
+  [ActionTypes.SHOW_LOADING]: undefined;
+  [ActionTypes.HIDE_LOADING]: undefined;
+  [ActionTypes.LOAD]: Note[];
 };
 
 type RootState = {
   notes: Note[];
+  loading: boolean;
 };
 
 type Action = {
-  [T in ActionTypes]: {
-    type: `${T}`;
-    payload: ActionPayloads[T];
-  };
+  [T in ActionTypes]: ActionPayloads[T] extends undefined
+    ? { type: `${T}`; payload?: undefined }
+    : { type: `${T}`; payload: ActionPayloads[T] };
 }[ActionTypes];
 
 function nextZIndex(notes: Note[]) {
@@ -48,11 +56,13 @@ export default function Reducer(state: RootState, { payload, type }: Action): Ro
         { ...payload, zIndex: nextZIndex(state.notes), id: crypto.randomUUID() },
       ];
       return {
+        ...state,
         notes,
       };
       break;
     case "edit":
       return {
+        ...state,
         notes: state.notes.reduce((all, next) => {
           all.push(next.id === payload.id ? payload : next);
           return all;
@@ -66,12 +76,14 @@ export default function Reducer(state: RootState, { payload, type }: Action): Ro
       if (pos >= 0) {
         copy.splice(pos, 1);
         return {
+          ...state,
           notes: copy,
         };
       }
       break;
     case "move":
       return {
+        ...state,
         notes: state.notes.reduce((all, next) => {
           if (next.id === payload.id) {
             all.push({
@@ -87,6 +99,7 @@ export default function Reducer(state: RootState, { payload, type }: Action): Ro
       break;
     case "resize":
       return {
+        ...state,
         notes: state.notes.reduce((all, next) => {
           if (next.id === payload.id) {
             all.push({
@@ -103,7 +116,26 @@ export default function Reducer(state: RootState, { payload, type }: Action): Ro
     case "front":
       const zIndex = nextZIndex(state.notes);
       return {
+        ...state,
         notes: state.notes.map((n) => (n.id === payload ? { ...n, zIndex } : n)),
+      };
+      break;
+    case "showLoading":
+      return {
+        ...state,
+        loading: true,
+      };
+      break;
+    case "hideLoading":
+      return {
+        ...state,
+        loading: false,
+      };
+      break;
+    case "load":
+      return {
+        ...state,
+        notes: payload,
       };
       break;
   }
@@ -124,7 +156,12 @@ export function StoreProvider({ children }: PropsWithChildren) {
   const { Provider } = Context;
   const [store, dispatch] = useReducer(Reducer, {
     notes: [],
+    loading: false,
   });
+
+  useEffect(() => {
+    load().then((notes) => dispatch({ type: "load", payload: notes }));
+  }, []);
 
   return <Provider value={[store, dispatch]}>{children}</Provider>;
 }

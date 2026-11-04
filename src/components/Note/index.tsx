@@ -22,7 +22,7 @@ export default function Note(props: Props) {
   const finishEditing = () => {
     if (!draft) return;
     setDraft(null);
-    if (draft.title !== (title ?? "") || draft.contents !== (contents ?? "")) {
+    if (draft.title !== (title) || draft.contents !== (contents)) {
       dispatch({ type: "edit", payload: { ...props, ...draft } });
     }
   };
@@ -81,7 +81,6 @@ export default function Note(props: Props) {
       <div
         className={noteFields}
         onBlur={(e) => {
-          // Focus moving between the fields, or to another window, isn't the end of an edit
           if (document.hasFocus() && !e.currentTarget.contains(e.relatedTarget as Node | null)) {
             finishEditing();
           }

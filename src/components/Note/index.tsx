@@ -6,12 +6,11 @@ import { HandleBottomRight } from "lucide-react";
 
 const MIN_SIZE = 50;
 import { note, noteFields, noteField, noteHandle } from "./index.module.css";
+import { blurOnKeys, overlapsTrash } from "./utils";
 
-const blurOnKeys =
-  (...keys: string[]) =>
-  (e: KeyboardEvent<HTMLElement>) => {
-    if (keys.includes(e.key)) e.currentTarget.blur();
-  };
+
+
+
 
 export default function Note(props: Props) {
   const { id, contents, title, position, dimensions, color, zIndex } = props;
@@ -34,9 +33,17 @@ export default function Note(props: Props) {
     onPointerDown: draft ? (e: PointerEvent<HTMLElement>) => e.stopPropagation() : undefined,
   };
 
-  const { offset, onPointerDown } = useNoteDrag(position, (pos) => {
-    dispatch({ type: "move", payload: { id, pos } });
-  });
+  const { offset, onPointerDown } = useNoteDrag(
+    position,
+    (pos, rect) => {
+      if (overlapsTrash(rect)) {
+        dispatch({ type: "remove", payload: id });
+        return;
+      }
+      dispatch({ type: "move", payload: { id, pos } });
+    },
+    (rect) => dispatch({ type: "highlightTrash", payload: !!rect && overlapsTrash(rect) }),
+  );
 
   const { offset: sizeOffset, onPointerDown: onResizePointerDown } = useNoteDrag(
     dimensions,

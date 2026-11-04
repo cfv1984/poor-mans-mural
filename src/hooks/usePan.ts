@@ -20,7 +20,11 @@ export function usePan(viewportRef: RefObject<HTMLElement | null>) {
     };
 
     const onPointerDown = (e: PointerEvent) => {
-      if (e.target !== el) return;
+      if (e.target !== el) {
+        // A press that starts on a note or control must not count as a click on the world.
+        dragged.current = true;
+        return;
+      }
       dragged.current = false;
       el.setPointerCapture(e.pointerId);
 

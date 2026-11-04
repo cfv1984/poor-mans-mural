@@ -19,6 +19,7 @@ enum ActionTypes {
   SHOW_LOADING = "showLoading",
   HIDE_LOADING = "hideLoading",
   LOAD = "load",
+  HIGHLIGHT_TRASH = "highlightTrash",
 }
 
 type ActionPayloads = {
@@ -31,11 +32,13 @@ type ActionPayloads = {
   [ActionTypes.SHOW_LOADING]: undefined;
   [ActionTypes.HIDE_LOADING]: undefined;
   [ActionTypes.LOAD]: Note[];
+  [ActionTypes.HIGHLIGHT_TRASH]: boolean;
 };
 
 type RootState = {
   notes: Note[];
   loading: boolean;
+  trashHighlighted: boolean;
 };
 
 type Action = {
@@ -138,6 +141,8 @@ export default function Reducer(state: RootState, { payload, type }: Action): Ro
         notes: payload,
       };
       break;
+    case "highlightTrash":
+      return state.trashHighlighted === payload ? state : { ...state, trashHighlighted: payload };
   }
   throw new Error("Unknown action");
 }
@@ -157,6 +162,7 @@ export function StoreProvider({ children }: PropsWithChildren) {
   const [store, dispatch] = useReducer(Reducer, {
     notes: [],
     loading: false,
+    trashHighlighted: false,
   });
 
   useEffect(() => {

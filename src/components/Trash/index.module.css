@@ -1,0 +1,18 @@
+.trash {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 10rem;
+  height: 10rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  border: 2px solid #aaa;
+}
+
+.highlighted {
+  background: #fdd;
+  border-color: #d33;
+  color: #d33;
+}

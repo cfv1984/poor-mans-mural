@@ -7,6 +7,7 @@ import { useWorldClick } from "../../hooks/useWorldClick";
 import type { Point } from "../../hooks/types";
 import { Colors, type Color } from "../Note/types";
 import SaveButton from "../SaveButton";
+import Trash from "../Trash";
 
 function randomInt(min: number, max: number) {
   return min + Math.floor(Math.random() * (max - min + 1));
@@ -56,6 +57,7 @@ export default function World() {
         ))}
       </section>
       <SaveButton />
+      <Trash />
     </main>
   );
 }

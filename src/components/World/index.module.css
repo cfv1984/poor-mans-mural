@@ -1,0 +1,24 @@
+:global(html),:global(body){
+    width:100%;
+    min-height:100vh;
+    margin:0;
+    padding:0;
+}
+
+.viewport {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: tomato;
+  touch-action: none;
+}
+
+.world {
+    position:absolute;
+    top:0;
+    left:0;
+    width:0;
+    height:0;
+}
+

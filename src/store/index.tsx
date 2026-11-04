@@ -15,15 +15,9 @@ enum ActionTypes {
 }
 
 type ActionPayloads = {
-  [ActionTypes.ADD]: {
-    note: Note;
-  };
-  [ActionTypes.REMOVE]: {
-    id: string;
-  };
-  [ActionTypes.EDIT]: {
-    note: Note;
-  };
+  [ActionTypes.ADD]: Note;
+  [ActionTypes.REMOVE]: string;
+  [ActionTypes.EDIT]: Note;
   [ActionTypes.MOVE]: { id: string; pos: [number, number] };
   [ActionTypes.RESIZE]: { id: string; size: [number, number] };
 };
@@ -45,7 +39,7 @@ export default function Reducer(
 ): RootState {
   switch (type) {
     case ActionTypes.ADD:
-      const notes = [...state.notes, payload.note];
+      const notes = [...state.notes, payload];
       return {
         notes,
       };
@@ -53,7 +47,7 @@ export default function Reducer(
     case "edit":
       return {
         notes: state.notes.reduce((all, next) => {
-          all.push(next.id === payload.note.id ? payload.note : next);
+          all.push(next.id === payload.id ? payload : next);
           return all;
         }, [] as Note[]),
       };
@@ -61,11 +55,13 @@ export default function Reducer(
 
     case "remove":
       const copy = [...state.notes];
-      const pos = copy.findIndex((n) => n.id === payload.id);
+      const pos = copy.findIndex((n) => n.id === payload);
+      if(pos>=0){
       copy.splice(pos, 1);
       return {
         notes: copy,
       };
+      }
       break;
     case "move":
       return {

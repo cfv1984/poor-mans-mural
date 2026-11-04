@@ -1,0 +1,52 @@
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type RefObject } from "react";
+import type { Point } from "./types";
+
+ 
+export function usePan(viewportRef: RefObject<HTMLElement | null>) {
+  const [cam, setCam] = useState<Point>({ x: 0, y: 0 });
+  const dragged = useRef(false);
+ 
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+ 
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      setCam(c => ({ x: c.x - e.deltaX, y: c.y - e.deltaY }));
+    };
+ 
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.target !== el) return; // no panear al agarrar una nota
+      dragged.current = false;
+      el.setPointerCapture(e.pointerId);
+ 
+      let last = { x: e.clientX, y: e.clientY };
+      const onMove = (m: PointerEvent) => {
+        const dx = m.clientX - last.x;
+        const dy = m.clientY - last.y;
+        last = { x: m.clientX, y: m.clientY };
+        if (dx || dy) dragged.current = true;
+        setCam(c => ({ x: c.x + dx, y: c.y + dy }));
+      };
+      const onUp = () => {
+        el.removeEventListener("pointermove", onMove);
+        el.removeEventListener("pointerup", onUp);
+        el.removeEventListener("pointercancel", onUp);
+      };
+      el.addEventListener("pointermove", onMove);
+      el.addEventListener("pointerup", onUp);
+      el.addEventListener("pointercancel", onUp);
+    };
+ 
+    el.addEventListener("wheel", onWheel, { passive: false });
+    el.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [viewportRef]);
+ 
+  return { cam, dragged };
+}
+ 
+ 
